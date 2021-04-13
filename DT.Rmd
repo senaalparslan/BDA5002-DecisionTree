@@ -8,7 +8,7 @@ output: html_notebook
 
 ```{r}
 library(readr)
-df <- read_csv("/Users/zisanyalcinkaya/Desktop/SENA/DecisionTree/Churn_Modelling.csv")
+df <- read_csv("/Users/Desktop/SENA/DecisionTree/Churn_Modelling.csv")
 df
 
 names(df)
