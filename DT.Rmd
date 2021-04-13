@@ -28,14 +28,44 @@ model_dt=glm(formula = Exited ~ CreditScore + Geography + Gender + Age +
  EstimatedSalary, family = binomial, data = df)
 
 
-df$survived <- as.factor(df$survived)
-df$sex <- as.factor(df$sex)
 
 library(rpart)
-install.packages("rpart.plot")
 library(rpart.plot)
-model_dt<- rpart(Exited ~.,data=df, method="class")
-rpart.plot(model_dt)
+model<- rpart(Exited ~.,data=df, method="class")
+rpart.plot(model)
+
+library(randomForest)
+#  using a random forest.
+model_rf<-randomForest(Exited~.,data=train1)
+# Let's look at the error
+plot(model_rf)
+summary(model_rf)
+
+
+library (tree)
+library (ISLR)
+treepredmodel = tree(formula= Exited ~ CreditScore + Geography + Gender + Age + 
+   Tenure + Balance + NumOfProducts + HasCrCard + IsActiveMember + 
+ EstimatedSalary, data = train1 )
+
+
+summary(treepredmodel)
+
+# plot the trained tree 
+plot(treepredmodel )
+text(treepredmodel,pretty=0)
+
+
+#Test the predictions of the trained model
+testpredictions = predict(treepredmodel, testdata, type ="class")
+
+#Find the accuracy of the model
+cm =table(testpredictions, testdata$High)
+
+#Display the accuracy of the model in test data
+accuracy = (cm[1,1] + cm[2,2]) / (cm[1,1] + cm[2,2] + cm[1,2] + cm[2,1])
+print(accuracy)
+
 
 
 ```
