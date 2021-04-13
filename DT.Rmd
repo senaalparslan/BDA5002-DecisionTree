@@ -1,0 +1,44 @@
+---
+title: "Discriminant Analysis using Decision Trees on Churn Modeling dataset"
+author: "Sena Alparslan"
+output: html_notebook
+---
+
+
+
+```{r}
+library(readr)
+df <- read_csv("/Users/zisanyalcinkaya/Desktop/SENA/DecisionTree/Churn_Modelling.csv")
+df
+
+names(df)
+
+# The train set with the important features 
+train_im<- df[1:dim(df)[1],c("Exited","CreditScore","Geography","Gender","Age","Tenure","Balance","NumOfProducts","IsActiveMember","HasCrCard","EstimatedSalary")]
+ind<-sample(1:dim(train_im)[1],500) # Sample of 500 out of 891
+train1<-train_im[ind,] # The train set of the model
+train2<-train_im[-ind,] # The test set of the model
+
+# Let's try to run a logistic regression
+model <- glm(Exited ~.,family=binomial(link='logit'),data=train1)
+summary(model)
+
+model_dt=glm(formula = Exited ~ CreditScore + Geography + Gender + Age + 
+   Tenure + Balance + NumOfProducts + HasCrCard + IsActiveMember + 
+ EstimatedSalary, family = binomial, data = df)
+
+
+df$survived <- as.factor(df$survived)
+df$sex <- as.factor(df$sex)
+
+library(rpart)
+install.packages("rpart.plot")
+library(rpart.plot)
+model_dt<- rpart(Exited ~.,data=df, method="class")
+rpart.plot(model_dt)
+
+
+```
+
+
+
